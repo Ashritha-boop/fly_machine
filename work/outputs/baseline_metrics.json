@@ -1,0 +1,10 @@
+{
+  "lane": "Refresh / Content Opportunity Scoring",
+  "evaluation_month": "2026-03",
+  "total_items_scored": 3929,
+  "base_rate": 0.6215,
+  "precision_at_20": 0.3,
+  "precision_at_50": 0.4,
+  "precision_at_100": 0.41,
+  "lift_over_base_rate_p50": 0.64
+}
