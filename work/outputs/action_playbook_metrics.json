@@ -1,0 +1,65 @@
+{
+  "source": {
+    "dataset": "data/raw/content_refresh_anonymized.csv",
+    "grain": "one pseudonymized content item per row",
+    "rows_scored": 30000,
+    "target": "is_declining_label",
+    "target_definition": "is_declining_label derived from same-snapshot trend_direction == down; not a future outcome"
+  },
+  "validation": {
+    "split_strategy": "client_holdout",
+    "train_rows": 27675,
+    "test_rows": 2325,
+    "test_base_rate": 0.5420666666666667,
+    "selected_model": "random_forest",
+    "selection_metric": "precision_at_50",
+    "precision_at_20": 0.65,
+    "precision_at_50": 0.74,
+    "precision_at_100": 0.72,
+    "baseline_precision_at_50": 0.24,
+    "interpretation": "held-out-client ranking metrics on the proxy label; not action uplift or future-month validation"
+  },
+  "rank_score": {
+    "model_probability_weight": 0.7,
+    "normalized_baseline_weight": 0.3,
+    "use": "human review ordering only"
+  },
+  "suggested_action_counts": {
+    "monitor": 13083,
+    "refresh": 8188,
+    "refresh_and_review_ctr": 6654,
+    "refresh_and_review_engagement": 1993,
+    "expand_and_refresh": 82
+  },
+  "review_archetype_counts": {
+    "visible_low_ctr": 9741,
+    "monitor_or_protect": 7708,
+    "visible_decline_risk": 7644,
+    "engagement_friction": 3415,
+    "other_refresh_review": 1410,
+    "thin_visible_content": 82
+  },
+  "reason_code_row_counts": {
+    "ctr_review_candidate": 9759,
+    "declining_with_demand": 13152,
+    "engagement_review_candidate": 6508,
+    "general_refresh_review": 9117,
+    "low_ctr_visible_page": 9759,
+    "low_engagement_visible_page": 6508,
+    "model_decline_risk": 8427,
+    "page_one_decay_risk": 7076,
+    "stale_visible_page": 17,
+    "thin_visible_page": 82,
+    "visible_model_opportunity": 10650
+  },
+  "exports": {
+    "queue_csv": "work/outputs/ranked_content_action_queue.csv",
+    "metrics_json": "work/outputs/action_playbook_metrics.json",
+    "action_mix_figure": "work/figures/action_playbook_action_mix.png"
+  },
+  "governance": {
+    "human_review_required": true,
+    "automated_actions_allowed": [],
+    "monitoring_thresholds_status": "proposed policy; not empirically validated"
+  }
+}
