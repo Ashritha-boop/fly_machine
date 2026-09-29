@@ -1,9 +1,9 @@
 # Can March Signals Prioritize Content for April Review?
 
-**Author:** Ashritha Chary  
-**Program:** FlyRank ML Internship  
-**Date:** 29 September 2026  
-**Repository:** [Ashritha-boop/fly_machine](https://github.com/Ashritha-boop/fly_machine)  
+**Author:** Ashritha Chary
+**Program:** FlyRank ML Internship
+**Date:** 29 September 2026
+**Repository:** [Ashritha-boop/fly_machine](https://github.com/Ashritha-boop/fly_machine)
 **Deployed paper:** [Research paper](../docs/index.html)
 
 ## Title + Abstract
