@@ -1,0 +1,99 @@
+{
+  "study": "March 2026 features; April 2026 impressions-drop proxy",
+  "source": {
+    "dataset": "FlyRank/internship-warehouse",
+    "dataset_url": "https://huggingface.co/datasets/FlyRank/internship-warehouse",
+    "release_revision": null,
+    "release_scale_daily_rows_approx": 79000000,
+    "fact_table": "fact_content_daily_performance",
+    "dimension_table": "dim_content",
+    "analysis_rows": 143206,
+    "client_count": 45,
+    "feature_window": ["2026-03-01", "2026-03-31"],
+    "label_window": ["2026-04-01", "2026-04-30"],
+    "eligibility": "Paired-month content-client pairs; March impressions >= 10; required March fields and content age present.",
+    "target": "April impressions < 80% of March impressions",
+    "target_base_rate": 0.517
+  },
+  "features": [
+    "gsc_impressions_march",
+    "gsc_clicks_march",
+    "gsc_avg_position_march",
+    "ga4_sessions_march",
+    "content_age_days",
+    "ga4_available_march",
+    "position_available_march"
+  ],
+  "validation": {
+    "primary_split": "Five-fold GroupKFold by client",
+    "diagnostic_split": "Five 80/20 ShuffleSplit random-row splits; diagnostic only",
+    "seed": 42,
+    "selected_model": "Logistic Regression",
+    "selection_metric": "Mean grouped-fold precision_at_50",
+    "selection_and_evaluation_share_folds": true,
+    "fold_spread_is_confidence_interval": false,
+    "client_held_out_means": {
+      "test_base_rate": 0.517,
+      "week4_rule": {
+        "precision_at_50_mean": 0.392,
+        "precision_at_50_sd": 0.214,
+        "average_precision_mean": 0.512
+      },
+      "logistic_regression": {
+        "precision_at_50_mean": 0.688,
+        "precision_at_50_sd": 0.157,
+        "average_precision_mean": 0.560
+      },
+      "hist_gradient_boosting": {
+        "precision_at_50_mean": 0.524,
+        "precision_at_50_sd": 0.248,
+        "average_precision_mean": 0.560
+      }
+    },
+    "random_row_diagnostic_means": {
+      "test_base_rate": 0.517,
+      "week4_rule": {
+        "precision_at_50_mean": 0.372,
+        "precision_at_50_sd": 0.079,
+        "average_precision_mean": 0.510
+      },
+      "logistic_regression": {
+        "precision_at_50_mean": 0.640,
+        "precision_at_50_sd": 0.075,
+        "average_precision_mean": 0.578
+      },
+      "hist_gradient_boosting": {
+        "precision_at_50_mean": 0.964,
+        "precision_at_50_sd": 0.038,
+        "average_precision_mean": 0.744
+      }
+    },
+    "interpretation": "Exploratory ranking result for one monthly proxy. No refresh uplift or future-month performance claim."
+  },
+  "leakage_checks": {
+    "client_and_content_hashes_excluded_from_features": true,
+    "april_outcome_and_proxy_label_excluded_from_features": true,
+    "trend_and_product_decision_fields_excluded": true,
+    "primary_folds_keep_clients_disjoint": true
+  },
+  "error_diagnostics": {
+    "threshold": 0.5,
+    "threshold_is_calibrated": false,
+    "false_positives": 37681,
+    "false_negatives": 35145,
+    "age_band_error_rates": {
+      "under_180_days": 0.471,
+      "180_to_365_days": 0.554,
+      "over_365_days": 0.525
+    }
+  },
+  "environment": {
+    "scikit_learn": "1.6.1",
+    "random_seed": 42
+  },
+  "exports": {
+    "chart": "work/figures/capstone_precision_at_50.png",
+    "metrics_receipt": "work/outputs/capstone_metrics.json",
+    "row_level_data_exported": false
+  }
+}

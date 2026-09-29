@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 410" role="img" aria-labelledby="chart-title chart-desc">
+  <title id="chart-title">Precision at 50 under random-row and client-held-out validation</title>
+  <desc id="chart-desc">The random-row diagnostic means are 0.372 for the Week-4 rule, 0.640 for Logistic Regression, and 0.964 for HistGradientBoosting. The client-held-out primary means are 0.392, 0.688, and 0.524. Whiskers show one fold standard deviation, not a confidence interval. The dashed line marks the 0.517 mean test base rate.</desc>
+  <rect width="960" height="410" fill="#ffffff"/>
+  <text x="54" y="29" fill="#172c2a" font-family="Georgia,serif" font-size="19">Mean precision@50 across five folds</text>
+  <text x="113" y="59" fill="#526361" font-family="sans-serif" font-size="13" font-weight="700">RANDOM ROWS - DIAGNOSTIC</text>
+  <text x="575" y="59" fill="#526361" font-family="sans-serif" font-size="13" font-weight="700">CLIENT-HELD-OUT - PRIMARY</text>
+  <g stroke="#d9e1dc" stroke-width="1">
+    <line x1="76" y1="320" x2="457" y2="320"/><line x1="76" y1="261" x2="457" y2="261"/>
+    <line x1="76" y1="202" x2="457" y2="202"/><line x1="76" y1="143" x2="457" y2="143"/><line x1="76" y1="84" x2="457" y2="84"/>
+    <line x1="522" y1="320" x2="930" y2="320"/><line x1="522" y1="261" x2="930" y2="261"/>
+    <line x1="522" y1="202" x2="930" y2="202"/><line x1="522" y1="143" x2="930" y2="143"/><line x1="522" y1="84" x2="930" y2="84"/>
+  </g>
+  <g fill="#526361" font-family="sans-serif" font-size="11" text-anchor="end">
+    <text x="65" y="324">0.00</text><text x="65" y="265">0.25</text><text x="65" y="206">0.50</text><text x="65" y="147">0.75</text><text x="65" y="88">1.00</text>
+  </g>
+  <g stroke="#a84132" stroke-width="2" stroke-dasharray="6 5">
+    <line x1="76" y1="198" x2="457" y2="198"/><line x1="522" y1="198" x2="930" y2="198"/>
+  </g>
+  <g fill="#a84132" font-family="sans-serif" font-size="11">
+    <text x="350" y="191">Base rate 0.517</text><text x="823" y="191">Base rate 0.517</text>
+  </g>
+  <g fill="#6b7478"><rect x="127" y="232" width="54" height="88"/><rect x="585" y="227" width="54" height="93"/></g>
+  <g fill="#147d73"><rect x="252" y="169" width="54" height="151"/><rect x="710" y="158" width="54" height="162"/></g>
+  <g fill="#df7144"><rect x="377" y="93" width="54" height="227"/><rect x="835" y="196" width="54" height="124"/></g>
+  <g stroke="#172c2a" stroke-width="1.5">
+    <path d="M154 210v37m-8-37h16m-8 37h16"/><path d="M279 151v36m-8-36h16m-8 36h16"/><path d="M404 84v18m-8-18h16m-8 18h16"/>
+    <path d="M612 176v101m-8-101h16m-8 101h16"/><path d="M737 121v74m-8-74h16m-8 74h16"/><path d="M862 138v117m-8-117h16m-8 117h16"/>
+  </g>
+  <g fill="#172c2a" font-family="sans-serif" font-size="12" font-weight="700" text-anchor="middle">
+    <text x="154" y="222">0.372</text><text x="279" y="141">0.640</text><text x="404" y="76">0.964</text>
+    <text x="612" y="166">0.392</text><text x="737" y="111">0.688</text><text x="862" y="128">0.524</text>
+  </g>
+  <g fill="#526361" font-family="sans-serif" font-size="11" text-anchor="middle">
+    <text x="154" y="341">Week-4 rule</text><text x="279" y="341">Logistic</text><text x="404" y="341">Gradient</text>
+    <text x="612" y="341">Week-4 rule</text><text x="737" y="341">Logistic</text><text x="862" y="341">Gradient</text>
+    <text x="279" y="359">regression</text><text x="404" y="359">boosting</text><text x="737" y="359">regression</text><text x="862" y="359">boosting</text>
+  </g>
+</svg>

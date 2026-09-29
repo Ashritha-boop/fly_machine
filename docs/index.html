@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A client-held-out study of March search signals and an April impressions-drop proxy across 143,206 eligible content items.">
+  <meta property="og:title" content="Can March Signals Prioritize Content for April Review?">
+  <meta property="og:description" content="A reproducible FlyRank internship warehouse study with grouped validation, an honest baseline comparison, and limits stated up front.">
+  <meta property="og:type" content="article">
+  <title>Can March Signals Prioritize Content for April Review? | Ashritha Chary</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f4f7f3;
+      --white: #ffffff;
+      --ink: #172c2a;
+      --muted: #526361;
+      --line: #cbd6cf;
+      --green: #147d73;
+      --green-dark: #0b5d55;
+      --orange: #df7144;
+      --red: #a84132;
+      --soft-green: #e4f0e9;
+      --soft-orange: #faeee7;
+      --serif: Georgia, "Times New Roman", serif;
+      --sans: "Trebuchet MS", "Segoe UI", sans-serif;
+      --measure: 740px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-size: 17px;
+      line-height: 1.68;
+    }
+    a { color: var(--green-dark); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+    a:hover { color: var(--red); }
+    a:focus-visible { outline: 3px solid var(--orange); outline-offset: 3px; }
+    .topline {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 14px max(24px, calc((100% - 1240px) / 2));
+      border-bottom: 1px solid var(--line);
+      background: var(--white);
+      color: var(--muted);
+      font-size: 13px;
+      letter-spacing: 0;
+    }
+    .topline strong { color: var(--ink); font-weight: 700; }
+    .toplinks { display: flex; flex-wrap: wrap; gap: 18px; }
+    .layout {
+      width: min(1240px, 100% - 48px);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 196px minmax(0, var(--measure));
+      gap: 76px;
+      align-items: start;
+    }
+    .toc {
+      position: sticky;
+      top: 24px;
+      margin-top: 72px;
+      padding: 0 0 18px 14px;
+      border-left: 2px solid var(--line);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .toc-label {
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .toc ol { margin: 0; padding: 0; list-style: none; }
+    .toc li + li { margin-top: 8px; }
+    .toc a { color: var(--muted); text-decoration: none; }
+    .toc a:hover { color: var(--green-dark); text-decoration: underline; }
+    article { min-width: 0; padding: 62px 0 72px; }
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 16px;
+      color: var(--green-dark);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { width: 27px; height: 3px; background: var(--orange); content: ""; }
+    h1, h2, h3 { font-family: var(--serif); font-weight: 500; letter-spacing: 0; line-height: 1.14; }
+    h1 { max-width: 720px; margin: 0; font-size: 52px; }
+    .byline { margin: 20px 0 0; color: var(--muted); font-size: 14px; }
+    .byline span { color: var(--line); padding: 0 8px; }
+    .abstract {
+      margin: 44px 0 42px;
+      padding: 22px 24px 24px;
+      border-left: 4px solid var(--green);
+      background: var(--white);
+    }
+    .abstract h2 { margin: 0 0 10px; font-family: var(--sans); font-size: 12px; font-weight: 700; text-transform: uppercase; }
+    .abstract p { margin: 0; font-size: 16px; }
+    .abstract p + p { margin-top: 10px; }
+    .abstract .abstract-copy { color: var(--muted); }
+    .signal-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      margin: 0 0 54px;
+    }
+    .signal { padding: 17px 15px 18px 0; }
+    .signal + .signal { padding-left: 20px; border-left: 1px solid var(--line); }
+    .signal strong { display: block; color: var(--green-dark); font-family: var(--serif); font-size: 30px; font-weight: 500; line-height: 1.1; }
+    .signal span { display: block; margin-top: 6px; color: var(--muted); font-size: 12px; line-height: 1.4; }
+    section { scroll-margin-top: 24px; margin: 0 0 54px; }
+    h2.section-title { margin: 0 0 17px; font-size: 34px; }
+    h3 { margin: 28px 0 8px; font-size: 22px; }
+    p { margin: 0 0 16px; }
+    .section-number { display: block; margin-bottom: 8px; color: var(--orange); font-family: var(--sans); font-size: 12px; font-weight: 700; }
+    .standfirst { color: var(--muted); font-size: 19px; line-height: 1.55; }
+    .note {
+      margin: 22px 0;
+      padding: 16px 19px;
+      border-left: 3px solid var(--orange);
+      background: var(--soft-orange);
+      font-size: 15px;
+    }
+    .note strong { color: var(--red); }
+    .table-wrap { max-width: 100%; overflow-x: auto; border-top: 2px solid var(--ink); border-bottom: 1px solid var(--line); }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; line-height: 1.5; }
+    caption { padding: 0 0 10px; color: var(--muted); text-align: left; font-size: 13px; }
+    th, td { padding: 10px 11px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+    thead th { color: var(--muted); font-size: 11px; font-weight: 700; text-transform: uppercase; }
+    tbody tr:last-child th, tbody tr:last-child td { border-bottom: 0; }
+    td.numeric, th.numeric { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+    .figure {
+      margin: 27px 0 30px;
+      padding: 20px 18px 12px;
+      background: var(--white);
+      border-top: 3px solid var(--green-dark);
+    }
+    .figure svg { display: block; width: 100%; height: auto; overflow: visible; }
+    figcaption { margin: 12px 0 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
+    .findings { margin: 18px 0; padding: 0; list-style: none; counter-reset: findings; }
+    .findings li { counter-increment: findings; display: grid; grid-template-columns: 34px 1fr; gap: 12px; padding: 15px 0; border-top: 1px solid var(--line); }
+    .findings li::before { content: "0" counter(findings); color: var(--orange); font-size: 12px; font-weight: 700; }
+    .findings strong { display: block; margin-bottom: 3px; }
+    .recommendations { counter-reset: rec; margin: 24px 0 0; padding: 0; list-style: none; }
+    .recommendations li { counter-increment: rec; position: relative; padding: 18px 0 18px 52px; border-top: 1px solid var(--line); }
+    .recommendations li::before { content: counter(rec, decimal-leading-zero); position: absolute; left: 0; top: 19px; color: var(--green-dark); font-family: var(--serif); font-size: 23px; }
+    .recommendations strong { display: block; margin-bottom: 4px; }
+    .tagline { display: inline-block; margin: 3px 0 0; padding: 2px 7px; background: var(--soft-green); color: var(--green-dark); font-size: 11px; font-weight: 700; }
+    .credit {
+      margin: 58px 0 0;
+      padding: 27px 0 0;
+      border-top: 3px solid var(--ink);
+      font-size: 18px;
+    }
+    .credit strong { font-family: var(--serif); font-size: 25px; font-weight: 500; }
+    .references { color: var(--muted); font-size: 13px; }
+    .references li { margin: 9px 0; }
+    footer { border-top: 1px solid var(--line); padding: 22px 24px; background: var(--white); color: var(--muted); font-size: 12px; }
+    footer div { width: min(1240px, 100%); margin: 0 auto; }
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; gap: 0; width: min(760px, 100% - 40px); }
+      .toc { position: static; order: -1; margin: 22px 0 0; padding: 12px 0 12px 13px; }
+      .toc ol { display: flex; flex-wrap: wrap; gap: 7px 15px; }
+      .toc li + li { margin-top: 0; }
+      article { padding-top: 42px; }
+    }
+    @media (max-width: 600px) {
+      body { font-size: 16px; }
+      .topline { align-items: flex-start; flex-direction: column; padding: 12px 20px; }
+      .layout { width: min(100% - 36px, 540px); }
+      article { padding-top: 32px; }
+      h1 { font-size: 39px; }
+      h2.section-title { font-size: 29px; }
+      .abstract { margin: 32px 0; padding: 18px; }
+      .signal-strip { grid-template-columns: 1fr; }
+      .signal { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; padding: 11px 0; }
+      .signal + .signal { padding-left: 0; border-left: 0; border-top: 1px solid var(--line); }
+      .signal strong { font-size: 25px; }
+      .signal span { max-width: 55%; margin: 0; text-align: right; }
+      .figure { padding: 14px 8px 10px; }
+      table { font-size: 12px; }
+      th, td { padding: 8px 6px; }
+      .toc { font-size: 12px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="topline">
+    <strong>FLYRANK ML INTERNSHIP · RESEARCH NOTE 01</strong>
+    <div class="toplinks">
+      <a href="https://github.com/Ashritha-boop/fly_machine">Repository</a>
+      <a href="https://colab.research.google.com/github/Ashritha-boop/fly_machine/blob/main/work/notebooks/capstone.ipynb?flush_cache=true">Open capstone in Colab</a>
+    </div>
+  </div>
+  <div class="layout">
+    <nav class="toc" aria-label="Paper contents">
+      <p class="toc-label">Contents</p>
+      <ol>
+        <li><a href="#abstract">Abstract</a></li>
+        <li><a href="#introduction">01 · Problem</a></li>
+        <li><a href="#data">02 · Data</a></li>
+        <li><a href="#methodology">03 · Method</a></li>
+        <li><a href="#results">04 · Results</a></li>
+        <li><a href="#limitations">05 · Limits</a></li>
+        <li><a href="#recommendations">06 · Actions</a></li>
+        <li><a href="#reproducibility">07 · Reproduce</a></li>
+        <li><a href="#acknowledgments">08 · Credit</a></li>
+      </ol>
+    </nav>
+    <article>
+      <header>
+        <p class="eyebrow">Applied search intelligence · Capstone study</p>
+        <h1>Can March Signals Prioritize Content for April Review?</h1>
+        <p class="byline">Ashritha Chary <span aria-hidden="true">|</span> FlyRank ML Internship <span aria-hidden="true">|</span> 29 September 2026</p>
+      </header>
+
+      <section class="abstract" id="abstract" aria-labelledby="abstract-title">
+        <h2 id="abstract-title">Abstract</h2>
+        <p>This study asks whether March measurements can rank content items at higher risk of an April impressions drop for limited editorial review. It queries the FlyRank internship warehouse's daily performance fact table and content dimension, yielding 143,206 eligible March–April content/client pairs across 45 clients from a release containing about 79 million daily records. Regularized logistic regression and histogram gradient boosting were compared with a fixed Week-4 rule using five client-held-out folds, while random-row splits were retained only as a weaker diagnostic. Across client-held-out folds, logistic regression achieved mean precision@50 of 0.688 versus 0.392 for the rule and a test base rate of 0.517; because model selection used those same folds, this result is exploratory rather than an untouched test. The result supports further evaluation of human-review prioritization, but it does not establish refresh uplift, predict search rankings, or guarantee performance on future months.</p>
+      </section>
+
+      <div class="signal-strip" aria-label="Study summary">
+        <div class="signal"><strong>143,206</strong><span>eligible paired-month content items</span></div>
+        <div class="signal"><strong>45</strong><span>clients kept separate in grouped folds</span></div>
+        <div class="signal"><strong>+0.296</strong><span>mean Precision@50 vs the fixed rule</span></div>
+      </div>
+
+      <section id="introduction" aria-labelledby="intro-title">
+        <span class="section-number">01 · DECISION</span>
+        <h2 class="section-title" id="intro-title">Introduction / Problem statement</h2>
+        <p class="standfirst">An editor has more pages to review than time to review them. The practical question is whether observable search and content signals can help order that review without pretending that a score knows which edit will work.</p>
+        <p>This study asks: using measurements available by 31 March 2026, can a model rank eligible content items that will show a large observed impressions drop in April more effectively than a transparent rule? The intended output is a review order for a human editor, not an automated refresh decision.</p>
+        <p>The unit is one pseudonymized content item within a client. A false positive spends review time on an item that does not cross the proxy threshold; a false negative leaves a declining item lower in the review order. Precision@50 measures the share of the first 50 ranked items that meet the proxy label. The test base rate is shown beside it so ranking performance is not read without context.</p>
+      </section>
+
+      <section id="data" aria-labelledby="data-title">
+        <span class="section-number">02 · SOURCE & SCOPE</span>
+        <h2 class="section-title" id="data-title">Data</h2>
+        <p>The analysis uses the gated <a href="https://huggingface.co/datasets/FlyRank/internship-warehouse">FlyRank/internship-warehouse</a> Parquet release, described by the project as roughly 79 million daily search-performance rows. The query reads `fact_content_daily_performance` and joins `dim_content` on pseudonymous content and client hashes. The evaluated frame is not 79 million model observations: it contains 143,206 eligible content-client pairs across 45 clients after aggregation.</p>
+        <div class="table-wrap">
+          <table>
+            <caption>Windows and population used in this evaluation</caption>
+            <thead><tr><th scope="col">Stage</th><th scope="col">Definition</th><th scope="col">Use</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Features</th><td>1–31 March 2026</td><td>Search impressions, clicks, average position; observed GA4 sessions and availability</td></tr>
+              <tr><th scope="row">Label</th><td>1–30 April 2026</td><td>April impressions below 80% of March impressions</td></tr>
+              <tr><th scope="row">Eligibility</th><td>Paired months; at least 10 March impressions</td><td>Then require non-missing March measurements and content age</td></tr>
+              <tr><th scope="row">Analysis frame</th><td>143,206 content-client pairs</td><td>45 clients, grouped into five folds</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>GA4 sessions are included only when `ga4_data_available IS TRUE`; missing session values are imputed within each training fold and the March availability flag remains a feature. Requiring paired months makes the result conditional on observed measurement availability. It does not describe pages without April coverage or below the March impression floor.</p>
+        <aside class="note"><strong>Public-safety boundary.</strong> Client and content hashes are used only for joins and client-grouped validation. No names, domains, page URLs, titles, raw queries, hashed IDs, or row-level examples appear in this paper or its aggregate exports. The warehouse is gated and is not copied into the repository.</aside>
+      </section>
+
+      <section id="methodology" aria-labelledby="method-title">
+        <span class="section-number">03 · DESIGN</span>
+        <h2 class="section-title" id="method-title">Methodology</h2>
+        <h3>Target and feature boundary</h3>
+        <p>The proxy label is 1 when April impressions are less than 80% of March impressions, and 0 otherwise. This threshold is a measurable decline screen, not a measure of content quality or the effect of an edit. Seven March-only inputs are used: impressions, clicks, average position, GA4 sessions, content age as of 31 March, the GA4 availability flag, and a position availability flag.</p>
+        <p>Client/content hashes, April impressions, the target label, trend-derived fields, and product decision outputs are excluded from model features. The leakage audit checks this feature boundary directly and confirms that primary-fold client groups do not overlap. It also checks that each predictor is measured by 31 March and before the April label window.</p>
+        <h3>Models and comparator</h3>
+        <p>Logistic Regression uses median imputation, standardization, and a 2,000-iteration limit. HistGradientBoosting uses median imputation, 120 iterations, at most 15 leaves, a minimum leaf size of 30, and L2 regularization of 1. The fixed Week-4 rule scores only content that is at least 180 days old, has at least 500 March impressions, and has average position of 4 or worse; its score is March impressions divided by average position plus one. Both models and the rule are evaluated on the same test rows in every fold.</p>
+        <h3>Validation</h3>
+        <p>The primary design is five-fold GroupKFold by client, covering 45 clients. Five 80/20 random-row splits are included as a deliberately weaker diagnostic because the same client can appear in both train and test. The seed is 42. Precision@50 and average precision are reported as unweighted means across folds with fold standard deviation; that spread is descriptive, not a confidence interval.</p>
+        <p>The model is selected by mean grouped-fold precision@50 on the same folds used to report it. This makes the result exploratory and potentially optimistic; it is not a sealed test or a time-forward test across several months.</p>
+      </section>
+
+      <section id="results" aria-labelledby="results-title">
+        <span class="section-number">04 · MEASURED COMPARISON</span>
+        <h2 class="section-title" id="results-title">Results</h2>
+        <p class="standfirst">Client grouping changes the picture. Under the primary grouped design, Logistic Regression ranks proxy-positive items ahead of the fixed rule on average, but the evaluation remains exploratory.</p>
+        <figure class="figure">
+          <svg viewBox="0 0 960 410" role="img" aria-labelledby="chart-title chart-desc" xmlns="http://www.w3.org/2000/svg">
+            <title id="chart-title">Precision at 50 under random-row and client-held-out validation</title>
+            <desc id="chart-desc">The random-row diagnostic has means of 0.372 for the Week-4 rule, 0.640 for Logistic Regression, and 0.964 for HistGradientBoosting. The client-held-out primary design has means of 0.392, 0.688, and 0.524 respectively. Whiskers show one fold standard deviation, not a confidence interval. A dashed line marks the 0.517 mean test base rate.</desc>
+            <rect x="0" y="0" width="960" height="410" fill="#ffffff"/>
+            <text x="54" y="29" fill="#172c2a" font-family="Georgia,serif" font-size="19">Mean precision@50 across five folds</text>
+            <text x="113" y="59" fill="#526361" font-family="Trebuchet MS,sans-serif" font-size="13" font-weight="700">RANDOM ROWS · DIAGNOSTIC</text>
+            <text x="575" y="59" fill="#526361" font-family="Trebuchet MS,sans-serif" font-size="13" font-weight="700">CLIENT-HELD-OUT · PRIMARY</text>
+            <g stroke="#d9e1dc" stroke-width="1">
+              <line x1="76" y1="320" x2="457" y2="320"/><line x1="76" y1="261" x2="457" y2="261"/>
+              <line x1="76" y1="202" x2="457" y2="202"/><line x1="76" y1="143" x2="457" y2="143"/><line x1="76" y1="84" x2="457" y2="84"/>
+              <line x1="522" y1="320" x2="930" y2="320"/><line x1="522" y1="261" x2="930" y2="261"/>
+              <line x1="522" y1="202" x2="930" y2="202"/><line x1="522" y1="143" x2="930" y2="143"/><line x1="522" y1="84" x2="930" y2="84"/>
+            </g>
+            <g fill="#526361" font-family="Trebuchet MS,sans-serif" font-size="11" text-anchor="end">
+              <text x="65" y="324">0.00</text><text x="65" y="265">0.25</text><text x="65" y="206">0.50</text><text x="65" y="147">0.75</text><text x="65" y="88">1.00</text>
+            </g>
+            <g stroke="#a84132" stroke-width="2" stroke-dasharray="6 5">
+              <line x1="76" y1="198" x2="457" y2="198"/><line x1="522" y1="198" x2="930" y2="198"/>
+            </g>
+            <g fill="#a84132" font-family="Trebuchet MS,sans-serif" font-size="11">
+              <text x="350" y="191">Base rate 0.517</text><text x="823" y="191">Base rate 0.517</text>
+            </g>
+            <g fill="#6b7478">
+              <rect x="127" y="232" width="54" height="88"/><rect x="585" y="227" width="54" height="93"/>
+            </g>
+            <g fill="#147d73">
+              <rect x="252" y="169" width="54" height="151"/><rect x="710" y="158" width="54" height="162"/>
+            </g>
+            <g fill="#df7144">
+              <rect x="377" y="93" width="54" height="227"/><rect x="835" y="196" width="54" height="124"/>
+            </g>
+            <g stroke="#172c2a" stroke-width="1.5">
+              <path d="M154 210v37m-8-37h16m-8 37h16"/><path d="M279 151v36m-8-36h16m-8 36h16"/><path d="M404 84v18m-8-18h16m-8 18h16"/>
+              <path d="M612 176v101m-8-101h16m-8 101h16"/><path d="M737 121v74m-8-74h16m-8 74h16"/><path d="M862 138v117m-8-117h16m-8 117h16"/>
+            </g>
+            <g fill="#172c2a" font-family="Trebuchet MS,sans-serif" font-size="12" font-weight="700" text-anchor="middle">
+              <text x="154" y="222">0.372</text><text x="279" y="141">0.640</text><text x="404" y="76">0.964</text>
+              <text x="612" y="166">0.392</text><text x="737" y="111">0.688</text><text x="862" y="128">0.524</text>
+            </g>
+            <g fill="#526361" font-family="Trebuchet MS,sans-serif" font-size="11" text-anchor="middle">
+              <text x="154" y="341">Week-4 rule</text><text x="279" y="341">Logistic</text><text x="404" y="341">Gradient</text>
+              <text x="612" y="341">Week-4 rule</text><text x="737" y="341">Logistic</text><text x="862" y="341">Gradient</text>
+              <text x="279" y="359">regression</text><text x="404" y="359">boosting</text><text x="737" y="359">regression</text><text x="862" y="359">boosting</text>
+            </g>
+          </svg>
+          <figcaption>Bars show mean precision@50; whiskers show ±1 fold standard deviation. The red dashed line is mean test base rate. Random-row validation is shown to expose a split-design sensitivity, not as evidence of transfer.</figcaption>
+        </figure>
+        <div class="table-wrap">
+          <table>
+            <caption>Same-fold comparison; fold means and standard deviations are descriptive</caption>
+            <thead><tr><th scope="col">Split</th><th scope="col">Method</th><th scope="col" class="numeric">Base rate</th><th scope="col" class="numeric">Precision@50</th><th scope="col" class="numeric">Avg. precision</th></tr></thead>
+            <tbody>
+              <tr><td>Random rows</td><th scope="row">Week-4 rule</th><td class="numeric">0.517</td><td class="numeric">0.372 ± 0.079</td><td class="numeric">0.510</td></tr>
+              <tr><td>Random rows</td><th scope="row">Logistic Regression</th><td class="numeric">0.517</td><td class="numeric">0.640 ± 0.075</td><td class="numeric">0.578</td></tr>
+              <tr><td>Random rows</td><th scope="row">HistGradientBoosting</th><td class="numeric">0.517</td><td class="numeric">0.964 ± 0.038</td><td class="numeric">0.744</td></tr>
+              <tr><td>Client-held-out</td><th scope="row">Week-4 rule</th><td class="numeric">0.517</td><td class="numeric">0.392 ± 0.214</td><td class="numeric">0.512</td></tr>
+              <tr><td>Client-held-out</td><th scope="row">Logistic Regression</th><td class="numeric">0.517</td><td class="numeric">0.688 ± 0.157</td><td class="numeric">0.560</td></tr>
+              <tr><td>Client-held-out</td><th scope="row">HistGradientBoosting</th><td class="numeric">0.517</td><td class="numeric">0.524 ± 0.248</td><td class="numeric">0.560</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <ul class="findings">
+          <li><div><strong>Grouped Logistic Regression led the rule at the top 50.</strong> The mean precision@50 difference was +0.296; the model was selected on these same folds, so treat the gap as exploratory.</div></li>
+          <li><div><strong>Random-row HistGradientBoosting is a warning, not the headline.</strong> Its 0.964 random-row precision@50 fell to 0.524 when whole clients were held out.</div></li>
+          <li><div><strong>The base rate remains substantial.</strong> At 0.517, over half of eligible rows meet the proxy label before ranking; precision must be read against that context.</div></li>
+        </ul>
+      </section>
+
+      <section id="limitations" aria-labelledby="limits-title">
+        <span class="section-number">05 · SCOPE</span>
+        <h2 class="section-title" id="limits-title">Limitations & honest framing</h2>
+        <p>The label is a one-month thresholded impressions proxy, not human-assessed page quality, a future search outcome, or an observed response to a refresh. A page crossing the 20% threshold does not imply that editing it would help.</p>
+        <p>This is one March-to-April transition. Paired-month coverage and the March impression floor define the eligible population and may select for measurement availability. The grouped design reduces client overlap, but 45 clients and one transition do not establish broad future-month transfer.</p>
+        <p>Model selection used the same folds as evaluation. Fold standard deviations are descriptive, not confidence intervals. Scores were not calibrated; at an illustrative 0.5 threshold, the audit counted 37,681 false positives and 35,145 false negatives, so those threshold counts should not be mistaken for ranking performance. Error rates were 0.471 for content under 180 days, 0.554 for 180–365 days, and 0.525 over 365 days; these are descriptive subgroups, not validated age effects.</p>
+        <p>No refresh interventions, recovered clicks, editorial effort, revenue, or user outcomes were measured. The evidence does not support causal uplift, ROI, search-ranking prediction, or guaranteed performance. The gated source is referenced by repository path and date windows, but its content-addressed revision was not recorded; reruns may differ if source data or software versions change.</p>
+        <aside class="note"><strong>Separate target, separate study.</strong> The validation notebook also audits a click-decline analysis with a different target and population. Its results are not merged into this impressions study.</aside>
+      </section>
+
+      <section id="recommendations" aria-labelledby="recommendations-title">
+        <span class="section-number">06 · ACTION PLAYBOOK</span>
+        <h2 class="section-title" id="recommendations-title">Ranked recommendations</h2>
+        <ol class="recommendations">
+          <li><strong>Pilot the model only as a human-reviewed ranking aid.</strong> The grouped-fold mean precision@50 is promising for this proxy, but same-fold selection makes it provisional. <span class="tagline">Decision support only</span></li>
+          <li><strong>Verify current measurements and eligibility before review.</strong> Check window completeness, seasonality, recent edits, and the impression floor; the measured result does not cover items outside that frame.</li>
+          <li><strong>Keep an editor between every score and every change.</strong> Review intent, current page quality, factual accuracy, compliance, and the reason for action. Record accept, defer, or reject and a short reason.</li>
+          <li><strong>Keep the rule and base rate visible in a capacity-limited pilot.</strong> Compare all three on the same held-out client groups; do not use random-row scores to justify transfer to new clients.</li>
+          <li><strong>Require a later untouched-month evaluation before scaling.</strong> Repeat over several months, assess calibration and client-level variation, and measure review cost and downstream outcomes before making uplift or ROI claims.</li>
+        </ol>
+        <p class="note"><strong>No-go actions:</strong> do not auto-publish, rewrite, delete, redirect, canonicalize, or assign work from this score.</p>
+      </section>
+
+      <section id="reproducibility" aria-labelledby="repro-title">
+        <span class="section-number">07 · ARTIFACTS</span>
+        <h2 class="section-title" id="repro-title">Reproducibility</h2>
+        <p>All code and validation notes are in the <a href="https://github.com/Ashritha-boop/fly_machine">public repository</a>. The capstone notebook queries the approved Parquet release with DuckDB, builds the same two-month frame, runs both split designs with seed 42, asserts the leakage boundary, and regenerates the figure and aggregate metrics receipt.</p>
+        <ul>
+          <li><a href="https://colab.research.google.com/github/Ashritha-boop/fly_machine/blob/main/work/notebooks/capstone.ipynb?flush_cache=true">Capstone notebook in Colab</a> · requires access approval and a read-only `HF_TOKEN` Colab Secret.</li>
+          <li><a href="https://github.com/Ashritha-boop/fly_machine/blob/main/work/notebooks/w06_validation_audit.ipynb">Validation audit notebook</a> · paired-month results, leakage checks, and claim rewrite.</li>
+          <li><a href="https://github.com/Ashritha-boop/fly_machine/blob/main/work/outputs/capstone_metrics.json">Aggregate metrics receipt</a> · fold-level and summary metrics; no row-level data.</li>
+          <li><a href="https://github.com/Ashritha-boop/fly_machine/blob/main/work/figures/capstone_precision_at_50.svg">Committed aggregate precision chart (SVG)</a>.</li>
+        </ul>
+        <p>To rerun: accept the FlyRank dataset terms, open the notebook in Colab, add the token through Colab Secrets as `HF_TOKEN`, then run all cells. Never paste a token into notebook source or commit it. A reader without warehouse approval can inspect the checked-in aggregate receipts and code but cannot fetch the gated data.</p>
+        <h3>Research-page design references</h3>
+        <p>The page uses a question-first title, short evidence-led sections, one primary chart with a nearby table and written takeaway, and static text alternatives rather than interaction that would obscure the result. This follows research-page writing guidance and principles discussed in:</p>
+        <ul class="references">
+          <li>Hohman, F., Conlen, M., Heer, J., and Chau, D. H. (2020). <a href="https://distill.pub/2020/communicating-with-interactive-articles/">Communicating with Interactive Articles</a>. <em>Distill</em>. DOI: 10.23915/distill.00028.</li>
+          <li>World Wide Web Consortium. <a href="https://www.w3.org/WAI/WCAG22/quickref/">Web Content Accessibility Guidelines (WCAG) 2.2 Quick Reference</a>: text alternatives, headings, keyboard access, contrast, and reflow.</li>
+        </ul>
+      </section>
+
+      <section class="credit" id="acknowledgments" aria-labelledby="credit-title">
+        <span class="section-number">08 · ACKNOWLEDGMENTS</span>
+        <h2 class="section-title" id="credit-title">Acknowledgments & data credit</h2>
+        <p><strong>Built on the <a href="https://flyrank.ai/">FlyRank ML Internship dataset</a>.</strong></p>
+        <p>Thanks to the FlyRank ML Internship team for the governed dataset and learning materials. This work uses the warehouse under its data-use terms; the author is responsible for the analysis and its limitations.</p>
+      </section>
+    </article>
+  </div>
+  <footer><div>Ashritha Chary · Research artifact · 29 September 2026 · <a href="https://github.com/Ashritha-boop/fly_machine">Source repository</a></div></footer>
+</body>
+</html>
